@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabelle mit verschiebbarer Leiste</title>
+    <style>
+        .scrollable-table-container {
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .drag-bar {
+            width: 100px; /* Breite der Leiste */
+            height: 20px;
+            background-color: #007bff;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+            user-select: none;
+        }
+        .table-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            margin-top: 30px; /* Platz für die Leiste */
+        }
+        table {
+            display: inline-block;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="scrollable-table-container">
+    <div class="drag-bar"></div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Spalte 1</th>
+                    <th>Spalte 2</th>
+                    <th>Spalte 3</th>
+                    <th>Spalte 4</th>
+                    <th>Spalte 5</th>
+                    <th>Spalte 6</th>
+                    <th>Spalte 7</th>
+                    <th>Spalte 8</th>
+                    <th>Spalte 9</th>
+                    <th>Spalte 10</th>
+                    <th>Spalte 11</th>
+                    <th>Spalte 12</th>
+                    <th>Spalte 13</th>
+                    <th>Spalte 14</th>
+                    <th>Spalte 15</th>
+                    <th>Spalte 16</th>
+                    <th>Spalte 17</th>
+                    <th>Spalte 18</th>
+                    <th>Spalte 19</th>
+                    <th>Spalte 20</th>
+                    <th>Spalte 21</th>
+                    <th>Spalte 22</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Beispiel-Datenzeilen -->
+                <tr>
+                    <td>Zeile 1, Zelle 1</td>
+                    <td>Zeile 1, Zelle 2</td>
+                    <td>Zeile 1, Zelle 3</td>
+                    <td>Zeile 1, Zelle 4</td>
+                    <td>Zeile 1, Zelle 5</td>
+                </tr>
+                <tr>
+                    <td>Zeile 2, Zelle 1</td>
+                    <td>Zeile 2, Zelle 2</td>
+                    <td>Zeile 2, Zelle 3</td>
+                    <td>Zeile 2, Zelle 4</td>
+                    <td>Zeile 2, Zelle 5</td>
+                </tr>
+                <!-- Weitere Zeilen können hier hinzugefügt werden -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    const dragBar = document.querySelector('.drag-bar');
+    const tableWrapper = document.querySelector('.table-wrapper');
+    let isDragging = false;
+    let startX, scrollLeft;
+    dragBar.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - dragBar.offsetLeft;
+        scrollLeft = tableWrapper.scrollLeft;
+    });
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - startX;
+        // Begrenze die Bewegung der dragBar, damit sie nicht über den linken Rand hinausgeht
+        const maxDrag = tableWrapper.clientWidth - dragBar.clientWidth;
+        const clampedX = Math.max(0, Math.min(x, maxDrag));
+        dragBar.style.left = `${clampedX}px`;
+        const maxScroll = tableWrapper.scrollWidth - tableWrapper.clientWidth;
+        const scrollPercent = clampedX / maxDrag;
+        tableWrapper.scrollLeft = scrollPercent * maxScroll;
+    });
+</script>
+</body>
+</html>
